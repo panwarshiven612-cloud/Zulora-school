@@ -469,23 +469,71 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        // Note: Import additional SDKs (auth, firestore) here when ready to use DB.
-        
-        // Exact Firebase Configuration from your screenshot
-        const firebaseConfig = {
-            apiKey: "AIzaSyCmyJ2WbjdFSJOIeKBC0Zv1usBF5bq5xvg",
-            authDomain: "zulora-ai-school.firebaseapp.com",
-            projectId: "zulora-ai-school",
-            storageBucket: "zulora-ai-school.firebasestorage.app",
-            messagingSenderId: "920017934012",
-            appId: "1:920017934012:web:6c59e9e11c6b114fc4e2b9"
-        };
+    // 1. Firebase ke core functions ko import karna
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, set, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        console.log("🔥 Firebase Initialized Successfully for Zulora AI!");
-    </script>
+    // 2. Tera Personal Firebase Config (Already correct)
+    const firebaseConfig = {
+        apiKey: "AIzaSyCmyJ2WbjdFSJOIeKBC0Zv1usBF5bq5xvg",
+        authDomain: "zulora-ai-school.firebaseapp.com",
+        projectId: "zulora-ai-school",
+        databaseURL: "https://zulora-ai-school-default-rtdb.firebaseio.com/", // Add this line
+        storageBucket: "zulora-ai-school.firebasestorage.app",
+        messagingSenderId: "920017934012",
+        appId: "1:920017934012:web:6c59e9e11c6b114fc4e2b9"
+    };
+
+    // 3. Initialize Firebase & Database
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // 4. Data Save Karne Ka Function
+    async function submitAndJoinWhatsApp() {
+        const name = document.getElementById('r-name').value.trim();
+        const email = document.getElementById('r-email').value.trim();
+        const phone = document.getElementById('r-phone').value.trim();
+        const role = document.getElementById('r-role').value;
+        const btn = document.querySelector('.btn-whatsapp-join');
+
+        if (!role || !name || !phone) {
+            alert("Bhai, saari details bharni padengi! 🛑");
+            return;
+        }
+
+        btn.innerText = "Saving Data...";
+        btn.disabled = true;
+
+        try {
+            // Realtime Database mein 'leads' naam ka ek folder banega
+            const leadsListRef = ref(db, 'leads');
+            const newLeadRef = push(leadsListRef); // Har user ke liye unique ID
+
+            await set(newLeadRef, {
+                fullName: name,
+                email: email,
+                phoneNumber: phone,
+                role: role,
+                registeredAt: new Date().toISOString()
+            });
+
+            console.log("Data Sent to Firebase! ✅");
+            
+            // Redirect to your WhatsApp Group
+            window.location.href = "https://chat.whatsapp.com/L6ESQCUtjUVBgO33YNOYA5?mode=gi_t";
+
+        } catch (error) {
+            console.error(error);
+            alert("Connection error! ❌");
+            btn.innerText = "Join WhatsApp Group";
+            btn.disabled = false;
+        }
+    }
+
+    // Global accessibility ke liye attach karna zaroori hai
+    window.submitAndJoinWhatsApp = submitAndJoinWhatsApp;
+</script>
+
 
     <script>
         // ---------------- 1. Global UI Interactions ----------------
