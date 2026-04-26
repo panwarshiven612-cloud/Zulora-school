@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init("5XYZjjce6cpHRVN77"); // Yahan apni Public Key daal dena
+   })();
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zulora AI | Masterclass by CEO Shiven Panwar</title>
@@ -518,7 +525,20 @@
             });
 
             console.log("Data Sent to Firebase! ✅");
-            
+        // --- EMAILJS AUTOMATION START ---
+        const templateParams = {
+            to_name: name,         // User ka naam jo usne form mein bhara
+            user_email: email      // User ki email id
+        };
+
+        emailjs.send('service_ptwzjd9', 'template_r409nk8', templateParams)
+            .then(function() {
+               console.log('Email Sent Successfully! 📩');
+            }, function(error) {
+               console.log('Email Failed... ❌', error);
+            });
+        // --- EMAILJS AUTOMATION END ---
+                               
             // Redirect to your WhatsApp Group
             window.location.href = "https://chat.whatsapp.com/L6ESQCUtjUVBgO33YNOYA5?mode=gi_t";
 
