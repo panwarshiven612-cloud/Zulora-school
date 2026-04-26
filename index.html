@@ -4,7 +4,8 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script type="text/javascript">
    (function(){
-      emailjs.init("5XYZjjce6cpHRVN77"); // Yahan apni Public Key daal dena
+      // Teri Original Public Key
+      emailjs.init("l8uS-Xp023E_vL0V9"); 
    })();
 </script>
 
@@ -525,20 +526,22 @@
             });
 
             console.log("Data Sent to Firebase! ✅");
-        // --- EMAILJS AUTOMATION START ---
+               // --- EMAILJS AUTOMATION START (Original Details) ---
         const templateParams = {
-            to_name: name,         // User ka naam jo usne form mein bhara
-            user_email: email      // User ki email id
+            to_name: name,         // Form field se user ka naam
+            user_email: email      // Form field se user ki email
         };
 
+        // Teri Original IDs: Service & Template
         emailjs.send('service_ptwzjd9', 'template_r409nk8', templateParams)
-            .then(function() {
-               console.log('Email Sent Successfully! 📩');
-            }, function(error) {
-               console.log('Email Failed... ❌', error);
+            .then(function(response) {
+               console.log('SUCCESS! Email chala gaya 📩', response.status, response.text);
+            })
+            .catch(function(error) {
+               console.log('FAILED... Error aaya hai ❌', error);
             });
         // --- EMAILJS AUTOMATION END ---
-                               
+                                
             // Redirect to your WhatsApp Group
             window.location.href = "https://chat.whatsapp.com/L6ESQCUtjUVBgO33YNOYA5?mode=gi_t";
 
